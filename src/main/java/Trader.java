@@ -13,63 +13,42 @@
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class Trader<T> {
     private final List<T> inventory;
     private final List<T> wishlist;
     private int money;
 
-
-    /**
-     * Construct a Trader, giving them the given inventory,
-     * wishlist, and money.
-     *
-     * @param inventory Objects in this Trader's inventory
-     * @param wishlist  Objects in this Trader's wishlist
-     * @param money     The Trader's money
-     */
-    public Trader(List<T> inventory, List<T> wishlist,
-                  int money) {
+    public Trader(List<T> inventory, List<T> wishlist, int money) {
         this.inventory = inventory;
         this.wishlist = wishlist;
         this.money = money;
     }
 
-    /* TODO: Add a new constructor that takes a single argument
-     *       representing the Trader's money. Give the Trader
-     *       empty ArrayLists for their inventory and wishlist.
-     */
+    // TODO: Add a new constructor that takes a single argument
+    // representing the Trader's money. Give the Trader
+    // empty ArrayLists for their inventory and wishlist.
+    public Trader(int money) {
+        this(new ArrayList<>(), new ArrayList<>(), money);
+    }
 
+    // TODO: Implement the method addToWishlist that takes an
+    // object of type T and adds it to this Trader's wishlist.
+    public void addToWishlist(T item) {
+        wishlist.add(item);
+    }
 
+    // TODO: Implement the method getSellingPrice that takes an
+    // object of type T and returns the object's price
+    // (via getPrice()) if it's Tradable. If not,
+    // return Tradable.MISSING_PRICE.
+    public int getSellingPrice(T item) {
+        if (item instanceof Tradable) {
+            return ((Tradable) item).getPrice();
+        } else {
+            return Tradable.MISSING_PRICE;
+        }
+    }
 
-
-
-    /* TODO: Implement the method addToWishlist that takes an
-     *       object of type T and adds it to this Trader's wishlist.
-     */
-
-
-
-
-
-    /* TODO: Implement the method getSellingPrice that takes an
-     *       object of type T and returns the object's price
-     *       (via getPrice()) if it's Tradable. If not,
-     *       return Tradable.MISSING_PRICE.
-     *
-     *       We will call this in exchangeMoney().
-     */
-
-
-
-
-
-    /**
-     * Exchange money from other to this Trader according to the price of item,
-     * if other has enough money. Otherwise, returns False.
-     *
-     * @return True if the exchange was completed.
-     */
     public boolean exchangeMoney(Trader<T> other, T item) {
         int selling_price = this.getSellingPrice(item);
         if (selling_price == Tradable.MISSING_PRICE) {
@@ -84,12 +63,6 @@ public class Trader<T> {
         return false;
     }
 
-    /**
-     * Attempt to sell all items that are in both this Trader's inventory
-     * and in other's wishlist.
-     *
-     * @return True iff at least one item was sold from this Trader to other
-     */
     public boolean sellTo(Trader<T> other) {
         boolean sold_at_least_one = false;
         List<T> temp = new ArrayList<>();
@@ -108,15 +81,9 @@ public class Trader<T> {
         return sold_at_least_one;
     }
 
-    /**
-     * Buy items from other.
-     *
-     * @return True iff at least one item was bought from other.
-     */
     public boolean buyFrom(Trader<T> other) {
         return other.sellTo(this);
     }
-
 
     @Override
     public String toString() {
@@ -141,5 +108,4 @@ public class Trader<T> {
     public List<T> getInventory(){
         return this.inventory;
     }
-
 }
